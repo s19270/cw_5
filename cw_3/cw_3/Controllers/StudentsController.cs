@@ -15,6 +15,7 @@ namespace cw_3.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly IDbService _dbService;
+        
         public readonly string conString = "Data Source=db-mssql;Initial Catalog=s19270;Integrated Security=True";
         public StudentsController(IDbService dbService)
         {
