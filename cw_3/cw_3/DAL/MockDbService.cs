@@ -12,10 +12,10 @@ namespace cw_3.DAL
         static MockDbService()
         {
             _students = new List<Student>{ 
-                new Student{IdStudent = 1, FirstName = "Jan", LastName = "Kowalski"},
-                new Student{IdStudent = 2, FirstName = "Robert", LastName = "Lewandowski"},
-                new Student{IdStudent = 3, FirstName = "Geralt", LastName = "Riv"},
-                new Student{IdStudent = 4, FirstName = "Darth", LastName = "Vader"}
+                new Student{FirstName = "Jan", LastName = "Kowalski"},
+                new Student{FirstName = "Robert", LastName = "Lewandowski"},
+                new Student{FirstName = "Geralt", LastName = "Riv"},
+                new Student{FirstName = "Darth", LastName = "Vader"}
             };
         }
         public IEnumerable<Student> GetStudents()

@@ -38,7 +38,6 @@ namespace cw_3.Controllers
                 while (dr.Read())
                 {
                     var st = new Student();
-                    st.IdStudent = id;
                     st.IndexNumber = dr["IndexNumber"].ToString();
                     st.FirstName = dr["FirstName"].ToString();
                     st.LastName = dr["LastName"].ToString();
