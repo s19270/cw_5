@@ -9,7 +9,7 @@ namespace cw_3.Services
 {
     public class SqlServerDbService : IStudentDbService
     {
-        public readonly string conString = "Data Source=db-mssql;Initial Catalog=s19270;Integrated Security=True";
+        public static readonly string conString = "Data Source=db-mssql;Initial Catalog=s19270;Integrated Security=True";
         public string AddStudent(NewStudent student)
         {
             if (student.Studies == null || student.FirstName == null ||
@@ -57,9 +57,55 @@ namespace cw_3.Services
                 return "Wystapili bledy";
             }
         }
-        public void PromoteStudents(string studies, int semester)
+
+        public List<Student> GetStudents()
         {
-            throw new NotImplementedException();
+            var list = new List<Student>();
+
+            using (SqlConnection con = new SqlConnection(conString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "select * from Student";
+
+                con.Open();
+                SqlDataReader dr = com.ExecuteReader();
+                while (dr.Read())
+                {
+                    var st = new Student();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    list.Add(st);
+                }
+
+            }
+            return (list);
+        }
+
+        public String PromoteStudents(string studies, int semester)
+        {
+            using (SqlConnection con = new SqlConnection(conString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                con.Open();
+                SqlTransaction trans = con.BeginTransaction("SampleTransaction");
+                com.Connection = con;
+                com.Transaction = trans;
+                try
+                {
+                    com.CommandText = "exec Promote @Studies = @studies, @Semester = @semester;";
+                    com.Parameters.AddWithValue("studies", studies);
+                    com.Parameters.AddWithValue("semester", semester);
+                    com.ExecuteNonQuery();
+                    return "Studenci uzyskali promocje";
+                }
+                catch (Exception ex)
+                {
+                    //trans.Rollback("Wystapil blad");
+                }
+                return "Wystapily bledy";
+            }
         }
     }
 }

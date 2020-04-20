@@ -9,6 +9,7 @@ namespace cw_3.Services
     interface IStudentDbService
     {
         String AddStudent(NewStudent student);
-        void PromoteStudents(string studies, int semester);
+        List<Student> GetStudents();
+        string PromoteStudents(string studies, int semester);
     }
 }

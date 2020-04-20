@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using cw_3.DAL;
 using cw_3.Models;
+using cw_3.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ namespace cw_3.Controllers
         [HttpGet]
         public IActionResult GetStudent()
         {
-            var list = new List<Student>();
+            /*var list = new List<Student>();
 
             using (SqlConnection con = new SqlConnection(conString))
             using (SqlCommand com = new SqlCommand())
@@ -34,7 +35,6 @@ namespace cw_3.Controllers
 
                 con.Open();
                 SqlDataReader dr = com.ExecuteReader();
-                int id = 1;
                 while (dr.Read())
                 {
                     var st = new Student();
@@ -42,12 +42,11 @@ namespace cw_3.Controllers
                     st.FirstName = dr["FirstName"].ToString();
                     st.LastName = dr["LastName"].ToString();
                     list.Add(st);
-                    id++;
                 }
 
-            }
-
-            return Ok(list);
+            }*/
+            SqlServerDbService sql = new SqlServerDbService();
+            return Ok(sql.GetStudents());
         }
 
         [HttpGet("{id}")]
@@ -83,6 +82,7 @@ namespace cw_3.Controllers
         {
             return Ok("Aktualizacja zakonczona");
         }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteStudent(int id)
         {

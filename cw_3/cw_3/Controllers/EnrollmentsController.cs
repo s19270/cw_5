@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using cw_3.Models;
+using cw_3.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +15,11 @@ namespace cw_3.Controllers
     public class EnrollmentsController : ControllerBase
     {
         public readonly string conString = "Data Source=db-mssql;Initial Catalog=s19270;Integrated Security=True";
-        
+        SqlServerDbService service = new SqlServerDbService();
         [HttpPost]
         public IActionResult CreateStudent(NewStudent student)
         {
-            if (student.Studies == null || student.FirstName == null ||
+            /*if (student.Studies == null || student.FirstName == null ||
                 student.LastName == null || student.Birthdate == null ||
                 student.IndexNumber == null) return NotFound("Brak danych");
             using (SqlConnection con = new SqlConnection(conString))
@@ -58,16 +59,38 @@ namespace cw_3.Controllers
                 }
                 catch(Exception ex)
                 {
-                    trans.Rollback("Wystapili bledy");
+                    trans.Rollback("Wystapily bledy");
                 }
-                return NotFound("Wystapili bledy");
-            }
+                return NotFound("Wystapily bledy");
+            }*/
+            return Ok(service.AddStudent(student));
         }
-        [Route("api/enrollments/promotions")]
-        [HttpGet]
-        public IActionResult Promote()
+        [HttpPost("promotions")]
+        public IActionResult Promote(String studies, int semester)
         {
-            return Ok("Dziala");
+
+            /*using (SqlConnection con = new SqlConnection(conString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                con.Open();
+                SqlTransaction trans = con.BeginTransaction("SampleTransaction");
+                com.Connection = con;
+                com.Transaction = trans;
+                try
+                {
+                    com.CommandText = "exec Promote @Studies = @studies, @Semester = @semester;";
+                    com.Parameters.AddWithValue("studies", studies);
+                    com.Parameters.AddWithValue("semester", semester);
+                    com.ExecuteNonQuery();
+                    return Ok("Studenci uzyskali promocje");
+                }
+                catch (Exception ex)
+                {
+                    //trans.Rollback("Wystapil blad");
+                }
+                return NotFound("Wystapily bledy");
+            }*/
+            return Ok(service.PromoteStudents(studies, semester));
         }
     }
 }
